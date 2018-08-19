@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Trip Buddy</title>
+    {% load static %}
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light sticky-top" style="background-color: #e3f2fd;">
+        <div class="container-fluid row">
+            <h2 class="col-lg-9">Welcome {{ user.first_name }} !</h2>
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link">Log out</button>
+            </form>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h3>Your Trip Schedules</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Destination</th>
+                    <th>Travel Start Date</th>
+                    <th>Travel End Date</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for planned_trip in planned_trips %}
+                <tr>
+                    <td><a href="{% url 'view' planned_trip.id %}">{{planned_trip.destination}}</a></td>
+                    <td>{{planned_trip.travel_start_date}}</td>
+                    <td>{{planned_trip.travel_end_date}}</td>
+                    <td>{{planned_trip.description}}</td>
+                    <td>
+                        <form action="{% url 'cancel_as_planner' planned_trip.id %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">Cancel</button>
+                        </form>
+                        <form action=" {% url 'delete' planned_trip.id %} " method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% for my_trip in my_trips %}
+                <tr>
+                    <td><a href="{% url 'view' my_trip.id %}">{{my_trip.destination}}</a></td>
+                    <td>{{my_trip.travel_start_date}}</td>
+                    <td>{{my_trip.travel_end_date}}</td>
+                    <td>{{my_trip.description}}</td>
+                    <td>
+                        <form action=" {% url 'cancel_as_traveler' my_trip.id %} " method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">Cancel</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="container mt-4">
+        <form action=" {% url 'add_trip' %} " method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-light">Add Trip!</button>
+        </form>
+    </div>
+    <div class="container mt-4">
+        <h3>Other User's Travel Plans</h3>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Travel Start Date</th>
+                    <th>Travel End Date</th>
+                    <th>Do you want to join?</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for other_trip in other_trips %}
+                <tr>
+                    <td>
+                        <form action=" {% url 'view' other_trip.id %} " method="get">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">{{ other_trip.destination }}</button>                 
+                        </form>
+                    </td>
+                    <td>{{ other_trip.travel_start_date }}</td>
+                    <td>{{ other_trip.travel_end_date }}</td>
+                    <td>
+                        <form action=" {% url 'join' other_trip.id %} " method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-link">Join</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
