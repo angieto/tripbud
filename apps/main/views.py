@@ -73,8 +73,9 @@ def delete(request, id):
 def view(request, id):
     user = User.objects.get(id=request.session['user'])    
     viewed_trip = Trip.objects.get(id=id)
+    trip_planner = viewed_trip.planner
     other_users = viewed_trip.travelers.all()
-    return render(request, 'main/view.html', {'user': user, 'viewed_trip': viewed_trip, 'other_users': other_users})
+    return render(request, 'main/view.html', {'user': user, 'viewed_trip': viewed_trip, 'trip_planner': trip_planner, 'other_users': other_users})
 
 def join(request, id):
     trip = Trip.objects.get(id=id)
