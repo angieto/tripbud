@@ -29,24 +29,6 @@
                 </tr>
             </thead>
             <tbody>
-                {% for planned_trip in planned_trips %}
-                <tr>
-                    <td><a href="{% url 'view' planned_trip.id %}">{{planned_trip.destination}}</a></td>
-                    <td>{{planned_trip.travel_start_date}}</td>
-                    <td>{{planned_trip.travel_end_date}}</td>
-                    <td>{{planned_trip.description}}</td>
-                    <td>
-                        <form action="{% url 'cancel_as_planner' planned_trip.id %}" method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link">Cancel</button>
-                        </form>
-                        <form action=" {% url 'delete' planned_trip.id %} " method="post">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
                 {% for my_trip in my_trips %}
                 <tr>
                     <td><a href="{% url 'view' my_trip.id %}">{{my_trip.destination}}</a></td>
@@ -54,10 +36,16 @@
                     <td>{{my_trip.travel_end_date}}</td>
                     <td>{{my_trip.description}}</td>
                     <td>
-                        <form action=" {% url 'cancel_as_traveler' my_trip.id %} " method="post">
+                        <form action="{% url 'cancel' my_trip.id %}" method="post">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-link">Cancel</button>
                         </form>
+                        {% if user.id == my_trip.planner.id %}
+                            <form action=" {% url 'delete' my_trip.id %} " method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

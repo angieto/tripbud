@@ -21,15 +21,15 @@
         <div class="container mt-5">
             <h2>{{ viewed_trip.destination }}</h2>
             <br>
-            <p><strong>Planned by:</strong> {{ trip_planner.first_name }} {{ trip_planner.last_name }}</p>
-            <p><strong>Description:</strong> {{ viewed_trip.description }} </p>
-            <p><strong>Travel Date From:</strong> {{ viewed_trip.travel_start_date }} </p>
-            <p><strong>Travel Date To:</strong> {{ viewed_trip.travel_end_date }}</p>
+            <p><strong>Planned by:</strong> {{ trip.planner.first_name }} {{ trip.planner.last_name }}</p>
+            <p><strong>Description:</strong> {{ trip.description }} </p>
+            <p><strong>Travel Date From:</strong> {{ trip.travel_start_date }} </p>
+            <p><strong>Travel Date To:</strong> {{ trip.travel_end_date }}</p>
         </div>
         <hr>
         <div class="container mt-3">
             <h3>Other Users on the Trip:</h3><br>
-            {% for user in other_users %}
+            {% for user in users %}
             <p>{{user.first_name}}</p>
             {% endfor %}
         </div>
